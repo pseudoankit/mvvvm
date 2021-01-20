@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.android.mvvm"
-        minSdkVersion 16
+        minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -84,4 +84,9 @@ dependencies {
     implementation 'com.xwray:groupie-databinding:2.3.0'
 
     implementation "androidx.preference:preference-ktx:1.1.1"
+
+    //rv
+    implementation "com.xwray:groupie:$groupie_version"
+    implementation "com.xwray:groupie-kotlin-android-extensions:$groupie_version"
+    implementation "com.xwray:groupie-databinding:2.3.0"
 }
