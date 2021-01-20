@@ -2,12 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="viewModel"
-            type="com.android.mvvm.ui.auth.AuthViewModel" />
-    </data>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/root_layout"
         android:layout_width="match_parent"
@@ -48,8 +42,7 @@
                     android:drawablePadding="16dp"
                     android:hint="ankit@gmail.com"
                     android:inputType="textEmailAddress"
-                    android:padding="12dp"
-                    android:text="@={viewModel.email}" />
+                    android:padding="12dp" />
 
                 <EditText
                     android:id="@+id/edit_text_password"
@@ -61,8 +54,7 @@
                     android:drawablePadding="16dp"
                     android:hint="password"
                     android:inputType="textPassword"
-                    android:padding="12dp"
-                    android:text="@={viewModel.password}" />
+                    android:padding="12dp" />
 
                 <TextView
                     android:id="@+id/text_view_forget_password"
@@ -78,25 +70,23 @@
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:onClick="@{viewModel::onLoginButtonClicked}"
                     android:text="Sign In"
                     android:textAllCaps="false" />
 
             </LinearLayout>
 
             <TextView
-                android:onClick="@{viewModel::onSignUp}"
                 android:id="@+id/text_view_sign_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/linearLayout2"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="12dp"
+                android:gravity="center_horizontal"
                 android:text="Don't have an account?\nSign Up Here"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/colorPrimary"
-                android:gravity="center_horizontal" />
+                android:textColor="@color/colorPrimary" />
 
         </RelativeLayout>
 

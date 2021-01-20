@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.android.mvvm.R
 import com.android.mvvm.data.db.entities.User
@@ -28,12 +29,9 @@ class SignUpActivity : AppCompatActivity(),AuthListener,KodeinAware {
 
         val binding: ActivitySignUpBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_sign_up)
-        val viewModel = ViewModelProviders.of(this, factory).get(AuthViewModel::class.java)
-//        val viewModel :AuthViewModel = AuthViewModel
-        binding.viewModel = viewModel
-        viewModel.authListener = this
+        val viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
 
-        viewModel.getUsers().observe(this, Observer { user ->
+        viewModel.getLoggedInUser().observe(this, Observer { user ->
             if (user != null) {
                 Intent(this, HomeActivity::class.java).also {
                     it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
