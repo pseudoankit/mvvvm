@@ -6,10 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.android.mvvm.R
-import com.android.mvvm.data.db.entities.User
 import com.android.mvvm.databinding.ActivityLoginBinding
 import com.android.mvvm.ui.home.HomeActivity
 import com.android.mvvm.util.*
@@ -30,7 +28,8 @@ class LoginActivity : AppCompatActivity(), KodeinAware {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
-        viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)     //deprection removed
+        viewModel =
+            ViewModelProvider(this, factory).get(AuthViewModel::class.java)     //deprection removed
 
         viewModel.getLoggedInUser().observe(this, Observer { user ->
             if (user != null) {
@@ -44,28 +43,37 @@ class LoginActivity : AppCompatActivity(), KodeinAware {
         binding.buttonSignIn.setOnClickListener {
             loginUser()
         }
+
+        binding.textViewSignUp.setOnClickListener {
+            startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
+        }
     }
 
     private fun loginUser() {
         val email = binding.editTextEmail.text.toString().trim()
         val password = binding.editTextPassword.text.toString().trim()
 
+        if (email.isEmpty()) {
+            binding.root.snackbar("Email is Required")
+            return
+        }
+        if (password.isEmpty()) {
+            binding.root.snackbar("Password is Required")
+            return
+        }
+
         lifecycleScope.launch {
             try {
                 val authResponse = viewModel.userLogin(email, password)
-                if(authResponse.user != null){
+                if (authResponse.user != null) {
                     viewModel.saveLoggedInUser(authResponse.user)
                 } else {
                     binding.rootLayout.snackbar(authResponse.message!!)
                 }
-                authResponse.user?.let {
-                    viewModel.saveLoggedInUser(it)
-                    return@launch
-                }
             } catch (e: ApiException) {
-
+                binding.root.snackbar(e.message!!)
             } catch (e: NoInternetException) {
-
+                binding.root.snackbar(e.message!!)
             }
         }
     }
