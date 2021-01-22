@@ -10,8 +10,7 @@ import com.android.mvvm.ui.BaseFragment
 import com.android.mvvm.util.Coroutines
 import com.android.mvvm.util.hide
 import com.android.mvvm.util.show
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
+import com.android.mvvm.util.snackbar
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -27,6 +26,10 @@ class QuotesFragment : BaseFragment<QuotesFragmentBinding, QuotesViewModel>(),Ko
 
     override fun getVMFactory() = factory
 
+    private val mAdapter by lazy {
+        QuotesAdapter()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -37,24 +40,19 @@ class QuotesFragment : BaseFragment<QuotesFragmentBinding, QuotesViewModel>(),Ko
         binding.progressBar.show()
         viewModel.quotes.await().observe(viewLifecycleOwner, Observer {
             binding.progressBar.hide()
-            initRecyclerView(it.toQuoteItem())
+            initRecyclerView(it)
         })
     }
 
-    private fun initRecyclerView(quoteItem: List<QuoteItem>) {
-        val mAdapter = GroupAdapter<ViewHolder>().apply {
-            addAll(quoteItem)
-        }
+    private fun initRecyclerView(list: List<Quote>) {
+        mAdapter.addItems(list)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
             adapter = mAdapter
         }
-    }
-
-    private fun List<Quote>.toQuoteItem() : List<QuoteItem>{
-        return this.map{
-            QuoteItem(it)
+        mAdapter.listener = {view, item, position ->
+            binding.root.snackbar(item.author)
         }
     }
 }
