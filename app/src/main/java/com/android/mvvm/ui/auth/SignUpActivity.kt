@@ -53,8 +53,21 @@ class SignUpActivity : AppCompatActivity(), KodeinAware {
         val password = binding.editTextPassword.text.toString().trim()
         val cPassword = binding.editTextPasswordConfirm.text.toString().trim()
 
+        if (name.isEmpty()) {
+            binding.root.snackbar("Name is Required")
+            return
+        }
+        if (email.isEmpty()) {
+            binding.root.snackbar("Email is Required")
+            return
+        }
+        if (password.isEmpty()) {
+            binding.root.snackbar("Password is Required")
+            return
+        }
         if (password != cPassword) {
             binding.root.snackbar("Password do not match")
+            return
         }
 
         lifecycleScope.launch {

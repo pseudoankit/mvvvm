@@ -1,37 +1,34 @@
 package com.android.mvvm.ui.home.profile
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
 import com.android.mvvm.R
 import com.android.mvvm.databinding.ProfileFragmentBinding
-import org.kodein.di.android.x.kodein
+import com.android.mvvm.ui.BaseFragment
+import com.android.mvvm.util.Coroutines
 import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 
-class ProfileFragment : Fragment(),KodeinAware {
+class ProfileFragment : BaseFragment<ProfileFragmentBinding, ProfileViewModel>(),KodeinAware {
 
     override val kodein by kodein()
-
     private val factory : ProfileViewModelFactory by instance()
-    private lateinit var viewModel: ProfileViewModel
+    override fun getFragmentView() = R.layout.profile_fragment
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun getViewModel() = ProfileViewModel::class.java
 
-        val binding : ProfileFragmentBinding = DataBindingUtil.inflate(inflater,R.layout.profile_fragment,container,false)
-        viewModel = ViewModelProviders.of(this,factory).get(ProfileViewModel::class.java)
-        binding.viewmodel = viewModel
-        binding.lifecycleOwner = this
+    override fun getVMFactory() = factory
 
-        return binding.root
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        Coroutines.main {
+            viewModel.user.await().observe(viewLifecycleOwner, Observer {
+                binding.tvEmail.text=it.email
+                binding.tvName.text=it.name
+            })
+        }
     }
 
 }

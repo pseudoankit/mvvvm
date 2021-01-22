@@ -2,14 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="viewmodel"
-            type="com.android.mvvm.ui.home.profile.ProfileViewModel" />
-
-    </data>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,22 +22,20 @@
                 android:textColor="@color/colorPrimary" />
 
             <TextView
+                android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@{viewmodel.user.name}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/colorPrimaryDark"
-                tools:text="Belal Khan" />
+                android:textColor="@color/colorPrimaryDark" />
 
             <TextView
+                android:id="@+id/tv_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@{viewmodel.user.email}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/colorPrimaryDark"
-                tools:text="probelalkhan@gmail.com" />
+                android:textColor="@color/colorPrimaryDark" />
         </LinearLayout>
 
     </FrameLayout>

@@ -13,6 +13,6 @@
     <fragment
         android:id="@+id/quotesFragment"
         android:name="com.android.mvvm.ui.home.quotes.QuotesFragment"
-        android:label="quotes_fragment"
+        android:label="Quotes"
         tools:layout="@layout/quotes_fragment" />
 </navigation>

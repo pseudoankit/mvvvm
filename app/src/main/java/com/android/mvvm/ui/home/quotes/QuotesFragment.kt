@@ -1,50 +1,42 @@
 package com.android.mvvm.ui.home.quotes
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mvvm.R
 import com.android.mvvm.data.db.entities.Quote
+import com.android.mvvm.databinding.QuotesFragmentBinding
+import com.android.mvvm.ui.BaseFragment
 import com.android.mvvm.util.Coroutines
 import com.android.mvvm.util.hide
 import com.android.mvvm.util.show
-import com.android.mvvm.util.toast
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.quotes_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 
-class QuotesFragment : Fragment(),KodeinAware {
+class QuotesFragment : BaseFragment<QuotesFragmentBinding, QuotesViewModel>(),KodeinAware {
 
     override val kodein by kodein()
-
     private val factory : QuotesViewModelFactory by instance()
-    private lateinit var viewModel: QuotesViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.quotes_fragment, container, false)
-    }
+    override fun getFragmentView() = R.layout.quotes_fragment
+
+    override fun getViewModel() = QuotesViewModel::class.java
+
+    override fun getVMFactory() = factory
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this,factory).get(QuotesViewModel::class.java)
+
         bindUI()
     }
 
     private fun bindUI() = Coroutines.main{
-        progress_bar.show()
+        binding.progressBar.show()
         viewModel.quotes.await().observe(viewLifecycleOwner, Observer {
-            progress_bar.hide()
+            binding.progressBar.hide()
             initRecyclerView(it.toQuoteItem())
         })
     }
@@ -53,7 +45,7 @@ class QuotesFragment : Fragment(),KodeinAware {
         val mAdapter = GroupAdapter<ViewHolder>().apply {
             addAll(quoteItem)
         }
-        recycler_view.apply {
+        binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
             adapter = mAdapter
